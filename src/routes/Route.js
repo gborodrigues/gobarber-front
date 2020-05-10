@@ -42,6 +42,6 @@ RouteWrapper.propTypes = {
     .isRequired,
 };
 
-RouteWrapper.propTypes = {
+RouteWrapper.defaultProps = {
   isPrivate: false,
 };
