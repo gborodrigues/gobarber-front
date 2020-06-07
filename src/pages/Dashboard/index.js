@@ -1,5 +1,16 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { format, addDays, subDays, setHours, setMinutes, setSeconds, isBefore, isEqual, parseISO } from 'date-fns';
+import {
+  format,
+  addDays,
+  subDays,
+  setHours,
+  setMinutes,
+  setSeconds,
+  isBefore,
+  isEqual,
+  parseISO,
+  setMilliseconds
+} from 'date-fns';
 import { utcToZonedTime } from 'date-fns-tz';
 import pt from 'date-fns/locale/pt';
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
@@ -28,14 +39,17 @@ export default function Dashboard() {
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
       const data = range.map(hour => {
-        const checkDate = setSeconds(setMinutes(setHours(date, hour), 0), 0);
+        const checkDate = setMilliseconds(
+          setSeconds(setMinutes(setHours(date, hour), 0), 0),
+          0
+        );
         const compareDate = utcToZonedTime(checkDate, timezone);
 
         return {
           time: `${hour}:00h`,
           past: isBefore(compareDate, new Date()),
           appointment: response.data.find(a =>
-            isEqual(parseISO(a.data), compareDate)
+            isEqual(parseISO(a.date), compareDate)
           ),
         };
       });
